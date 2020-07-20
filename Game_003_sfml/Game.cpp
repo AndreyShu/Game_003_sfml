@@ -4,6 +4,9 @@
 void Game::initWindow()
 {
 	this->window = new sf::RenderWindow(sf::VideoMode(800, 600), "Game 3", sf::Style::Close | sf::Style::Titlebar);
+	this->window->setFramerateLimit(60);
+	this->window->setVerticalSyncEnabled(false);
+
 }
 
 //Constructor and Destructor
@@ -33,6 +36,9 @@ void Game::update()
 	while (this->window->pollEvent(e))
 	{
 		if (e.Event::type == sf::Event::Closed)
+			this->window->close();
+
+		if(e.Event::KeyPressed && e.Event::key.code == sf::Keyboard::Escape)
 			this->window->close();
 	}
 }
