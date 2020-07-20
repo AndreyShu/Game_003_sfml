@@ -6,8 +6,13 @@ class Game
 private:
 	sf::RenderWindow* window;
 
+	//Player
+	Player* player;
+
+
 	//Private functions
 	void initWindow();
+	void initPlayer();
 
 
 public:
