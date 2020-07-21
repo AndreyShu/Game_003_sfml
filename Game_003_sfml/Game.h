@@ -3,6 +3,7 @@
 #include <map>
 #include"Player.h"
 #include "Bullet.h"
+#include "Enemy.h"
 
 class Game
 {
@@ -17,6 +18,10 @@ private:
 
 	//Player
 	Player* player;
+
+	//Enemies
+	Enemy* enemy;
+
 
 
 	//Private functions
