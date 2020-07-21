@@ -9,6 +9,10 @@ void Game::initWindow()
 
 }
 
+void Game::initTextures()
+{
+}
+
 void Game::initPlayer()
 {
 	this->player = new Player();
@@ -37,7 +41,7 @@ void Game::run()
 	}
 }
 
-void Game::update()
+void Game::updatePollEvents()
 {
 	sf::Event e;
 	while (this->window->pollEvent(e))
@@ -45,10 +49,13 @@ void Game::update()
 		if (e.Event::type == sf::Event::Closed)
 			this->window->close();
 
-		if(e.Event::KeyPressed && e.Event::key.code == sf::Keyboard::Escape)
+		if (e.Event::KeyPressed && e.Event::key.code == sf::Keyboard::Escape)
 			this->window->close();
 	}
+}
 
+void Game::updateInput()
+{
 	//Move player
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
 		this->player->move(-1.f, 0.f);
@@ -58,6 +65,12 @@ void Game::update()
 		this->player->move(0.f, -1.f);
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
 		this->player->move(0.f, 1.f);
+}
+
+void Game::update()
+{
+	this->updatePollEvents();
+	this->updateInput();
 }
 
 void Game::render()
