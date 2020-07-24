@@ -15,6 +15,22 @@ void Game::initTextures()
 	this->textures["BULLET"]->loadFromFile("Textures/Bullet.png");
 }
 
+void Game::initGUI()
+{
+	//Load font
+	if (!this->font.loadFromFile("Fonts/karma.ttf"))
+	{
+		std::cout << "ERROR::GAME::Failed to load font" << "\n";
+
+	}
+
+	//Init point text
+	this->pointText.setFont(this->font);
+	this->pointText.setCharacterSize(22);
+	this->pointText.setFillColor(sf::Color::White);
+	this->pointText.setString("test");
+}
+
 void Game::initPlayer()
 {
 	this->player = new Player();
@@ -31,6 +47,7 @@ Game::Game()
 {
 	this->initWindow();
 	this->initTextures();
+	this->initGUI();
 	this->initPlayer();
 	this->initEnemies();
 }
@@ -104,6 +121,11 @@ void Game::updateInput()
 	}
 }
 
+void Game::updateGUI()
+{
+
+}
+
 void Game::updateBullets()
 {
 	unsigned counter = 0;
@@ -124,7 +146,7 @@ void Game::updateBullets()
 	}
 }
 
-void Game::updateEnemies()
+void Game::updateEnemiesAndCombat()
 {
 	this->spawnTimer += 0.5f;
 	if (this->spawnTimer >= this->spawnTimerMax)
@@ -135,13 +157,28 @@ void Game::updateEnemies()
 
 	for (int i = 0; i < this->enemies.size(); ++i)
 	{
+		bool enemy_removed = false;
 		this->enemies[i]->update();
 
-		//Remove enemy at the bottom of the screen
-		if (this->enemies[i]->getBounds().top > this->window->getSize().y)
+		for (size_t k = 0; k < this->bullets.size() && enemy_removed == false; k++)
 		{
-			this->enemies.erase(this->enemies.begin() + i);
-			std::cout << this->enemies.size() << "\n";
+			if (this->bullets[k]->getBounds().intersects(this->enemies[i]->getBounds()))
+			{
+				this->bullets.erase(this->bullets.begin() + k);
+				this->enemies.erase(this->enemies.begin() + i);
+				enemy_removed = true;
+			}
+		}
+
+		//Remove enemy at the bottom of the screen
+		if(enemy_removed == false)
+		{ 
+			if (this->enemies[i]->getBounds().top > this->window->getSize().y)
+			{
+				this->enemies.erase(this->enemies.begin() + i);
+				std::cout << this->enemies.size() << "\n";
+				enemy_removed = true;
+			}
 		}
 	}
 }
@@ -152,7 +189,13 @@ void Game::update()
 	this->updateInput();
 	this->player->update();
 	this->updateBullets();
-	this->updateEnemies();
+	this->updateEnemiesAndCombat();
+	this->updateGUI();
+}
+
+void Game::renderGUI()
+{
+	this->window->draw(this->pointText);
 }
 
 void Game::render()
@@ -171,6 +214,8 @@ void Game::render()
 	{
 		enemy->render(this->window);
 	}
+
+	this->renderGUI();
 
 	this->window->display();
 }
