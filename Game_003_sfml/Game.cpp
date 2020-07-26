@@ -41,6 +41,11 @@ void Game::initWorld()
 	this->worldBackground.setTexture(this->worldBackgroundTexture);
 }
 
+void Game::initSystems()
+{
+	this->points = 0;
+}
+
 void Game::initPlayer()
 {
 	this->player = new Player();
@@ -59,6 +64,7 @@ Game::Game()
 	this->initTextures();
 	this->initGUI();
 	this->initWorld();
+	this->initSystems();
 	this->initPlayer();
 	this->initEnemies();
 }
@@ -134,7 +140,9 @@ void Game::updateInput()
 
 void Game::updateGUI()
 {
-
+	std::stringstream ss;
+	ss << "Points: " <<this->points;
+	this->pointText.setString(ss.str());
 }
 
 void Game::updateWorld()
@@ -148,6 +156,24 @@ void Game::updateCollision()
 	if (this->player->getBounds().left < 0.f)
 	{
 		this->player->setPosition(0.f, this->player->getBounds().top);
+	}
+
+	//Right world collision
+	else if (this->player->getBounds().left + this->player->getBounds().width >= this->window->getSize().x)
+	{
+		this->player->setPosition(this->window->getSize().x - this->player->getBounds().width, this->player->getBounds().top);
+	}
+
+	//Top world collision
+	if (this->player->getBounds().top < 0.f)
+	{
+		this->player->setPosition(this->player->getBounds().left, 0.f);
+	}
+
+	//Bottom world collision
+	else if (this->player->getBounds().top + this->player->getBounds().height >= this->window->getSize().y)
+	{
+		this->player->setPosition(this->player->getBounds().left, this->window->getSize().y - this->player->getBounds().height);
 	}
 }
 

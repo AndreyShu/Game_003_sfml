@@ -1,6 +1,8 @@
 #pragma once
 
 #include <map>
+#include <string>
+#include <sstream>
 #include"Player.h"
 #include "Bullet.h"
 #include "Enemy.h"
@@ -23,6 +25,10 @@ private:
 	sf::Texture worldBackgroundTexture;
 	sf::Sprite worldBackground;
 
+	//Systems
+	unsigned points;
+
+
 	//Player
 	Player* player;
 
@@ -36,6 +42,7 @@ private:
 	void initTextures();
 	void initGUI();
 	void initWorld();
+	void initSystems();
 	void initPlayer();
 	void initEnemies();
 
