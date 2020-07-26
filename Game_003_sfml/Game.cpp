@@ -217,7 +217,13 @@ void Game::updateEnemies()
 		//Bullet cullunt (top of screen)
 		if (enemy->getBounds().top > this->window->getSize().y)
 		{
-			//Delete bullet
+			//Delete enemy
+			delete this->enemies.at(counter);
+			this->enemies.erase(this->enemies.begin() + counter);
+			--counter;
+		}
+		else if(enemy->getBounds().intersects(this->player->getBounds()))
+		{
 			delete this->enemies.at(counter);
 			this->enemies.erase(this->enemies.begin() + counter);
 			--counter;
@@ -237,6 +243,8 @@ void Game::updateCombat()
 		{
 			if (this->enemies[i]->getBounds().intersects(this->bullets[k]->getBounds()))
 			{
+				this->points += this->enemies[i]->getPoints();
+
 				delete this->enemies[i];
 				this->enemies.erase(this->enemies.begin() + i);
 
