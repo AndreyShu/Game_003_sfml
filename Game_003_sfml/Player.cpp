@@ -6,7 +6,7 @@ void Player::initVariables()
 	this->attackCooldawnMax = 5.f;
 	this->attackCooldawn = this->attackCooldawnMax;
 
-	this->hpMax = 10;
+	this->hpMax = 100;
 	this->hp = this->hpMax;
 }
 
@@ -80,6 +80,8 @@ void Player::setHp(const int hp)
 void Player::loseHp(const int value)
 {
 	this->hp -= value;
+	if (this->hp < 0)
+		this->hp = 0;
 }
 
 void Player::move(const float dirX, const float dirY)
